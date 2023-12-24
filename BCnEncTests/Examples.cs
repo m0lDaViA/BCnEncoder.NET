@@ -1,74 +1,76 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using BCnEncoder.Decoder;
 using BCnEncoder.Encoder;
-using BCnEncoder.ImageSharp;
+using BCnEncoder.NET.ImageSharp;
 using BCnEncoder.Shared;
-using Microsoft.Toolkit.HighPerformance;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using Xunit;
 
-namespace BCnEncTests
+namespace BCnEncTests;
+
+public class Examples
 {
-	public class Examples
+		
+	public void EncodeImageSharp()
 	{
+		using var image = Image.Load<Rgba32>("example.png");
+
+		var encoder = new BcEncoder
+		{
+			OutputOptions =
+			{
+				GenerateMipMaps = true,
+				Quality = CompressionQuality.Balanced,
+				Format = CompressionFormat.Bc1,
+				FileFormat = OutputFileFormat.Ktx //Change to Dds for a dds file.
+			}
+		};
+
+		using var fs = File.OpenWrite("example.ktx");
+		encoder.EncodeToStream(image, fs);
+	}
 		
-		public void EncodeImageSharp()
-		{
-			using Image<Rgba32> image = Image.Load<Rgba32>("example.png");
+	public void DecodeImageSharp()
+	{
+		using var fs = File.OpenRead("compressed_bc1.ktx");
 
-			BcEncoder encoder = new BcEncoder();
-
-			encoder.OutputOptions.GenerateMipMaps = true;
-			encoder.OutputOptions.Quality = CompressionQuality.Balanced;
-			encoder.OutputOptions.Format = CompressionFormat.Bc1;
-			encoder.OutputOptions.FileFormat = OutputFileFormat.Ktx; //Change to Dds for a dds file.
-
-			using FileStream fs = File.OpenWrite("example.ktx");
-			encoder.EncodeToStream(image, fs);
-		}
-		
-		public void DecodeImageSharp()
-		{
-			using FileStream fs = File.OpenRead("compressed_bc1.ktx");
-
-			BcDecoder decoder = new BcDecoder();
-			using Image<Rgba32> image = decoder.DecodeToImageRgba32(fs);
+		var decoder = new BcDecoder();
+		using var image = decoder.DecodeToImageRgba32(fs);
 			
-			using FileStream outFs = File.OpenWrite("decoding_test_bc1.png");
-			image.SaveAsPng(outFs);
-		}
+		using var outFs = File.OpenWrite("decoding_test_bc1.png");
+		image.SaveAsPng(outFs);
+	}
 
-		public void EncodeHdr()
-		{
-			HdrImage image = HdrImage.Read("example.hdr");
+	public void EncodeHdr()
+	{
+		var image = HdrImage.Read("example.hdr");
 			
 
-			BcEncoder encoder = new BcEncoder();
-
-			encoder.OutputOptions.GenerateMipMaps = true;
-			encoder.OutputOptions.Quality = CompressionQuality.Balanced;
-			encoder.OutputOptions.Format = CompressionFormat.Bc6U;
-			encoder.OutputOptions.FileFormat = OutputFileFormat.Ktx; //Change to Dds for a dds file.
-
-			using FileStream fs = File.OpenWrite("example.ktx");
-			encoder.EncodeToStreamHdr(image.PixelMemory, fs);
-		}
-
-		public void DecodeHdr()
+		var encoder = new BcEncoder
 		{
-			using FileStream fs = File.OpenRead("compressed_bc6.ktx");
+			OutputOptions =
+			{
+				GenerateMipMaps = true,
+				Quality = CompressionQuality.Balanced,
+				Format = CompressionFormat.Bc6U,
+				FileFormat = OutputFileFormat.Ktx //Change to Dds for a dds file.
+			}
+		};
 
-			BcDecoder decoder = new BcDecoder();
-			Memory2D<ColorRgbFloat> pixels = decoder.DecodeHdr2D(fs);
+		using var fs = File.OpenWrite("example.ktx");
+		encoder.EncodeToStreamHdr(image.PixelMemory, fs);
+	}
 
-			HdrImage image = new HdrImage(pixels.Span);
+	public void DecodeHdr()
+	{
+		using var fs = File.OpenRead("compressed_bc6.ktx");
 
-			using FileStream outFs = File.OpenWrite("decoded.hdr");
-			image.Write(outFs);
-		}
+		var decoder = new BcDecoder();
+		var pixels = decoder.DecodeHdr2D(fs);
+
+		var image = new HdrImage(pixels.Span);
+
+		using var outFs = File.OpenWrite("decoded.hdr");
+		image.Write(outFs);
 	}
 }

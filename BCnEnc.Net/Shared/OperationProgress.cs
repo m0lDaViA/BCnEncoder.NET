@@ -1,27 +1,29 @@
 using System;
 
-namespace BCnEncoder.Shared
+namespace BCnEncoder.Shared;
+
+/// <summary>
+/// 
+/// </summary>
+public class OperationProgress(IProgress<ProgressElement> progress, int totalBlocks)
 {
-	public class OperationProgress
+	private int processedBlocks;
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="processedBlocks"></param>
+	public void SetProcessedBlocks(int processedBlocks)
 	{
-		private readonly IProgress<ProgressElement> progress;
-		private readonly int totalBlocks;
-		private int processedBlocks;
+		this.processedBlocks = processedBlocks;
+	}
 
-		public OperationProgress(IProgress<ProgressElement> progress, int totalBlocks)
-		{
-			this.progress = progress;
-			this.totalBlocks = totalBlocks;
-		}
-
-		public void SetProcessedBlocks(int processedBlocks)
-		{
-			this.processedBlocks = processedBlocks;
-		}
-
-		public void Report(int currentBlock)
-		{
-			progress?.Report(new ProgressElement(processedBlocks + currentBlock, totalBlocks));
-		}
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="currentBlock"></param>
+	public void Report(int currentBlock)
+	{
+		progress?.Report(new ProgressElement(processedBlocks + currentBlock, totalBlocks));
 	}
 }

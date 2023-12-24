@@ -2,8 +2,8 @@ using System;
 using BCnEncoder.Shared;
 using BCnEncoder.Shared.ImageFiles;
 
-namespace BCnEncoder.Encoder
-{
+namespace BCnEncoder.Encoder;
+
 	internal interface IBcBlockEncoder<T> where T : unmanaged
 	{
 		byte[] Encode(T[] blocks, int blockWidth, int blockHeight, CompressionQuality quality, OperationContext context);
@@ -13,6 +13,3 @@ namespace BCnEncoder.Encoder
 		DxgiFormat GetDxgiFormat();
 		int GetBlockSize();
 	}
-
-
-}

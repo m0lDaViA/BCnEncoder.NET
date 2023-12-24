@@ -1,33 +1,32 @@
-namespace BCnEncoder.Shared
+namespace BCnEncoder.Shared;
+
+/// <summary>
+/// The component to take from colors for BC4 and BC5.
+/// </summary>
+public enum ColorComponent
 {
 	/// <summary>
-	/// The component to take from colors for BC4 and BC5.
+	/// The red component of an Rgba32 color.
 	/// </summary>
-	public enum ColorComponent
-	{
-		/// <summary>
-		/// The red component of an Rgba32 color.
-		/// </summary>
-		R,
+	R,
 
-		/// <summary>
-		/// The green component of an Rgba32 color.
-		/// </summary>
-		G,
+	/// <summary>
+	/// The green component of an Rgba32 color.
+	/// </summary>
+	G,
 
-		/// <summary>
-		/// The blue component of an Rgba32 color.
-		/// </summary>
-		B,
+	/// <summary>
+	/// The blue component of an Rgba32 color.
+	/// </summary>
+	B,
 
-		/// <summary>
-		/// The alpha component of an Rgba32 color.
-		/// </summary>
-		A,
+	/// <summary>
+	/// The alpha component of an Rgba32 color.
+	/// </summary>
+	A,
 
-		/// <summary>
-		/// Use the color's luminance value as the component.
-		/// </summary>
-		Luminance
-	}
+	/// <summary>
+	/// Use the color's luminance value as the component.
+	/// </summary>
+	Luminance
 }
