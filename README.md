@@ -5,7 +5,7 @@
 A Cross-platform BCn / DXT encoding libary for .NET
 
 # What is it?
-BCnEncoder.NET is a library for compressing rgba images to different block-compressed formats. It has no native dependencies ~~and is .NET Standard 2.1 compatible~~.
+BCnEncoder.NET is a library for compressing rgba images to different block-compressed formats. It has no native dependencies ~~and is .NET Standard 2.1 compatible~~.  
 Removed .NET Framkework and .NET 2.1 support and added .NET 8 support.
 
 Supported formats are:
