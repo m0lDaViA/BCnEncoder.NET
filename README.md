@@ -5,7 +5,8 @@
 A Cross-platform BCn / DXT encoding libary for .NET
 
 # What is it?
-BCnEncoder.NET is a library for compressing rgba images to different block-compressed formats. It has no native dependencies and is .NET Standard 2.1 compatible.
+BCnEncoder.NET is a library for compressing rgba images to different block-compressed formats. It has no native dependencies ~~and is .NET Standard 2.1 compatible~~.
+Removed .NET Framkework and .NET 2.1 support and added .NET 8 support.
 
 Supported formats are:
  - Raw unsigned byte R, RG, RGB and RGBA formats
@@ -85,47 +86,5 @@ BcEncoder encoder = new BcEncoder();
 
 encoder.OutputOptions.GenerateMipMaps = true;
 encoder.OutputOptions.Quality = CompressionQuality.Balanced;
-encoder.OutputOptions.Format = CompressionFormat.Bc6U;
-encoder.OutputOptions.FileFormat = OutputFileFormat.Ktx; //Change to Dds for a dds file.
 
-using FileStream fs = File.OpenWrite("example.ktx");
-encoder.EncodeToStreamHdr(image.PixelMemory, fs);
-```
 
-How to decode a BC6H encoded file.
-```CSharp
-using FileStream fs = File.OpenRead("compressed_bc6.ktx");
-
-BcDecoder decoder = new BcDecoder();
-Memory2D<ColorRgbFloat> pixels = decoder.DecodeHdr2D(fs);
-
-HdrImage image = new HdrImage(pixels.Span);
-
-using FileStream outFs = File.OpenWrite("decoded.hdr");
-image.Write(outFs);
-```
-
-# TO-DO
-
-- [x] BC1 / DXT1 Encoding Without Alpha
-- [x] BC1 / DXT1 Encoding With 1bit of alpha
-- [x] BC2 / DXT3 Encoding
-- [x] BC3 / DXT5 Encoding
-- [x] BC4 Encoding
-- [x] BC5 Encoding
-- [x] BC7 / BPTC Encoding
-- [x] DDS file support
-- [x] Implement PCA to remove Accord.Statistics dependency
-- [x] BC6H HDR Encoding
-- [ ] Performance improvements
-- [ ] ETC / ETC2 Encoding?
-
-# Contributing
-All contributions are welcome. I'll try to respond to bug reports and feature requests as fast as possible, but you can also fix things yourself and submit a pull request. Please note, that by submitting a pull request you accept that your code will be dual licensed under MIT and public domain Unlicense.
-
-# License
-This library is dual-licensed under the [Unlicense](https://unlicense.org/) and [MIT](https://opensource.org/licenses/MIT) licenses.
-
-You may use this code under the terms of either license.
-
-Please note, that any dependencies of this project are licensed under their own respective licenses.
